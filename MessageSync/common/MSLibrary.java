@@ -9,7 +9,7 @@ public class MSLibrary {
 	{
 		if (data == null)
 			return -1;
-		return (0b00000001 & Integer.parseInt((new String(data)).substring(0,8), 2));
+		return (0b00000001 & ((int)data[0]));
 	}
 
 	public static int getAmountOfPackets(byte[] data) 
@@ -29,7 +29,7 @@ public class MSLibrary {
 		if (data == null)
 			return null;
 
-		int dataTypeInt = (0b00011110 & Integer.parseInt((new String(data)).substring(0,8), 2)) >> 1;
+		int dataTypeInt = (0b00011110 & ((int)data[0])) >> 1;
 
 		switch (dataTypeInt) {
 			case 0:	return "byte";
@@ -49,7 +49,7 @@ public class MSLibrary {
 	{
 		if (data == null)
 			return null;
-		int packetTypeInt = (Integer.parseInt((new String(data)).substring(0,8), 2)) >> 5;
+		int packetTypeInt = ((int)data[1]) >> 5;
 
 		switch (packetTypeInt) {
 			case 0:	return "SYN";

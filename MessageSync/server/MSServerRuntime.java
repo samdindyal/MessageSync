@@ -108,8 +108,7 @@ public class MSServerRuntime {
 		}
 
 		dataOut = MSLibrary.preparePacket(5, 8, 0, message);
-		sendPacket(dataOut, 1);
-
+			sendPacket(dataOut, 1);
 	}
 
 	public void normalRun() {
@@ -129,7 +128,6 @@ public class MSServerRuntime {
 
 	public static void main (String[] args){
 		MSServerRuntime rt = new MSServerRuntime();
-		rt.listen(1);
-		rt.reply("HI", 1);
+		rt.normalRun();
 	}
 }
