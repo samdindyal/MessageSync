@@ -2,6 +2,7 @@ package MessageSync.server;
 
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
+import java.util.Calendar;
 
 import MessageSync.common.MSLibrary;
 
@@ -90,39 +91,40 @@ public class MSServerRuntime {
 
 	public void sendMessage(String message)
 	{
+		String[] messageSegments = MSLibrary.breakMessage(message);
+
+		for (int i = 0; i < messageSegments.length && !MSLibrary.getPacketType(dataIn).equals("FIN"); i++)
+		{
+				
+			dataOut = MSLibrary.prepareDATAPacket(8, messageSegments[i], i%2);
+			dataIn = listen(1);
+
+			if (!MSLibrary.getPacketType(dataIn).equals("ACK")
+				|| MSLibrary.getSequenceBit(dataIn) != i%2)
+			{
+				i--;
+				continue;
+			}
+		}
+
+		dataOut = MSLibrary.preparePacket(5, 8, 0, message);
+		sendPacket(dataOut, 1);
+
+	}
+
+	public void normalRun() {
 		if (MSLibrary.getPacketType(dataIn = listen(1)).equals("SYN"))
 		{
 			System.out.println("SYN PACKET RECEIVED");
+			String message = messageOfTheDay[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)];
 
 			// Send SYNACK
 			dataOut = MSLibrary.preparePacket(1, 8, 0, message);
 			sendPacket(dataOut, 1);
 
-			String[] messageSegments = MSLibrary.breakMessage(message);
-
-			for (int i = 0; i < messageSegments.length; i++)
-			{
-				if (MSLibrary.getPacketType(dataIn = listen(1)).equals("REQUEST"))
-				{
-					dataOut = MSLibrary.prepareDATAPacket(8, messageSegments[i], i%2);
-					dataIn = listen(1);
-
-					if (!MSLibrary.getPacketType(dataIn).equals("ACK")
-						|| MSLibrary.getSequenceBit(dataIn) != i%2)
-					{
-						i--;
-						continue;
-					}
-				}
-				else
-				{
-					i--;
-					continue;
-				}
-
-			}
+			if (MSLibrary.getPacketType(dataIn = listen(1)).equals("REQUEST"))
+				sendMessage(message);
 		}
-
 	}
 
 	public static void main (String[] args){

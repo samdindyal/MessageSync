@@ -61,6 +61,10 @@ public class MSClientRuntime {
 		}
 	}
 
+	public void normalRun() {
+
+	}
+
 	public static void main(String[] args){
 		// MSClientRuntime rt = new MSClientRuntime();
 		// rt.request("HELLO", 1);
