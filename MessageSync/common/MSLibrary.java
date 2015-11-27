@@ -94,7 +94,10 @@ public class MSLibrary {
 
 	public static byte[] preparePacket(int packetType, int identifier, int sequenceBit, String data)
 	{
+		byte bytes[] = new byte[16];
 		int signature = (packetType << 5) + (identifier << 1) + sequenceBit;
+
+		return bytes;
 	}
 
 	public static String[] breakMessage(String message)
