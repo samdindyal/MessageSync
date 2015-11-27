@@ -10,7 +10,17 @@ public class MSServerRuntime {
 	private DatagramSocket socket;
 	private DatagramPacket request, reply;
 
-	private byte buffer[], dataIn[];
+	private byte buffer[], dataIn[], dataOut[];
+
+	private String messageOfTheDay[] =  new String[]{
+		"The highway speed limit is 100.",
+		"I like to drink ShareTea.",
+		"My favourite drink is Coffee.",
+		"We are going to ace 706",
+		"The assignment is due at 4PM.",
+		"Carolyn is the president of WICS",
+		"Daniel is the president of VSAR"
+	};
 
 	public MSServerRuntime() {
 
@@ -35,7 +45,7 @@ public class MSServerRuntime {
 		} catch (Exception e){
 			if (attempt <= 5)
 			{
-				System.err.println("Could not get packet. Attempt: " + attempt);
+				System.err.println("Waiting for a packet. Attempt: " + attempt);
 				attempt++;
 				listen(attempt);
 			}
@@ -48,7 +58,7 @@ public class MSServerRuntime {
 
 	public void reply(String response, int attempt) {
 		try {
-			reply = new DatagramPacket(response.getBytes(), response.length(), request.getAddress(), request.getPort());
+			reply = new DatagramPacket(response.getBytes(), 16, request.getAddress(), request.getPort());
 			socket.send(reply);
 		} catch(Exception e){
 			if (attempt <= 5)
@@ -60,6 +70,71 @@ public class MSServerRuntime {
 			else
 				System.err.println("Maximum attempts reached.");
 		}
+	}
+
+	public void sendPacket(byte[] data, int attempt) {
+		try {
+			reply = new DatagramPacket(data, 16, request.getAddress(), request.getPort());
+			socket.send(reply);
+		} catch(Exception e){
+			if (attempt <= 5)
+			{
+				System.err.println("Could not send packet. Attempt: " + attempt);
+				attempt++;
+				sendPacket(data, attempt);
+			}	
+			else
+				System.err.println("Maximum attempts reached.");
+		}
+	}
+
+	public void sendMessage(String message)
+	{
+		if (MSLibrary.getPacketType(dataIn = listen(1)).equals("SYN"))
+		{
+			System.out.println("SYN PACKET RECEIVED");
+
+			// Send SYNACK
+			dataOut = MSLibrary.preparePacket(1, 8, 0, message);
+			sendPacket(dataOut, 1);
+
+			String[] messageSegments = MSLibrary.breakMessage(message);
+
+			for (int i = 0; i < messageSegments.length; i++)
+			{
+				if (MSLibrary.getPacketType(dataIn = listen(1)).equals("REQUEST"))
+				{
+					dataOut = MSLibrary.prepareDATAPacket(8, messageSegments[i], i%2);
+					dataIn = listen(1);
+
+					if (!MSLibrary.getPacketType(dataIn).equals("ACK")
+						|| MSLibrary.getSequenceBit(dataIn) != i%2)
+					{
+						i--;
+						continue;
+					}
+
+					// public static byte[] prepareDATAPacket(
+					// int identifier, String data, int sequenceBit)
+				}
+				else
+				{
+					i--;
+					continue;
+				}
+
+			}
+
+
+			// public static byte[] preparePacket(int packetType, 
+			// int identifier, int sequenceBit, String data)
+			
+
+
+		}
+
+		
+
 	}
 
 	public static void main (String[] args){

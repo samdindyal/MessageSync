@@ -135,7 +135,6 @@ public class MSLibrary {
 			else
 				messageSegments[i] = message.substring(i*15, (i+1)*15);
 		}
-
 		return messageSegments;
 	}
 }
