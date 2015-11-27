@@ -1,5 +1,5 @@
 #!/bin/bash
 
-javac server/*.java
-javac client/*.java
-javac common/*.java
+javac MessageSync/server/*.java
+javac MessageSync/client/*.java
+javac MessageSync/common/*.java
