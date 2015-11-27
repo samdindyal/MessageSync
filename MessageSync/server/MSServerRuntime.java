@@ -113,9 +113,6 @@ public class MSServerRuntime {
 						i--;
 						continue;
 					}
-
-					// public static byte[] prepareDATAPacket(
-					// int identifier, String data, int sequenceBit)
 				}
 				else
 				{
@@ -124,16 +121,7 @@ public class MSServerRuntime {
 				}
 
 			}
-
-
-			// public static byte[] preparePacket(int packetType, 
-			// int identifier, int sequenceBit, String data)
-			
-
-
 		}
-
-		
 
 	}
 
