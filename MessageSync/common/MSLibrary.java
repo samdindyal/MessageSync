@@ -97,7 +97,30 @@ public class MSLibrary {
 		byte bytes[] = new byte[16];
 		int signature = (packetType << 5) + (identifier << 1) + sequenceBit;
 
+		int numberOfPackets = (int)(Math.ceil(data.length()/15.0));
+		int counter = 0;
+		int packetShift = numberOfPackets;
+
+		for (int i = 15; i > 1; i--)
+		{
+			packetShift = packetShift << (counter * 8);
+
+			bytes[i] = (byte)(0b11111111 & (packetShift));
+			counter++;
+		}
+
 		return bytes;
+	}
+
+	public static int getNumberOfPackets(byte[] data)
+	{
+		int numberOfPackets = 0;
+		for (int i = 1; i < 16; i++)
+		{
+			numberOfPackets = numberOfPackets << 8;
+			numberOfPackets += (int)data[i];
+		}
+		return numberOfPackets;
 	}
 
 	public static String[] breakMessage(String message)

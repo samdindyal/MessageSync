@@ -62,8 +62,11 @@ public class MSClientRuntime {
 	}
 
 	public static void main(String[] args){
-		MSClientRuntime rt = new MSClientRuntime();
-		rt.request("HELLO", 1);
-		rt.listen(1);
+		// MSClientRuntime rt = new MSClientRuntime();
+		// rt.request("HELLO", 1);
+		// rt.listen(1);
+
+		String test = "123456789012345678901234567890";
+		
 	}
 }
