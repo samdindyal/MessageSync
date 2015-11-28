@@ -49,7 +49,8 @@ public class MSLibrary {
 	{
 		if (data == null)
 			return null;
-		int packetTypeInt = ((int)data[1]) >> 5;
+
+		int packetTypeInt = (data[0] & 0b11100000) >> 5;
 
 		switch (packetTypeInt) {
 			case 0:	return "SYN";
@@ -97,9 +98,12 @@ public class MSLibrary {
 		byte bytes[] = new byte[16];
 		int signature = (packetType << 5) + (identifier << 1) + sequenceBit;
 
+		bytes[0] = (byte)signature;
+
 		int numberOfPackets = (int)(Math.ceil(data.length()/15.0));
 		int counter = 0;
 		int packetShift = numberOfPackets;
+
 
 		for (int i = 15; i > 1; i--)
 		{

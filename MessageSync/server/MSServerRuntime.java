@@ -40,9 +40,6 @@ public class MSServerRuntime {
 			socket.receive(request);
 			dataIn = request.getData();
 
-			for (int i = 0; i < dataIn.length; i++)
-				System.out.println(dataIn[i]);
-
 		} catch (Exception e){
 			if (attempt <= 5)
 			{
@@ -53,6 +50,8 @@ public class MSServerRuntime {
 			else
 				System.err.println("Maximum attempts reached.");
 		}
+
+		System.out.println(MSLibrary.getPacketType(dataIn) + " RECEIVED");
 
 		return dataIn;
 	}
@@ -97,6 +96,7 @@ public class MSServerRuntime {
 		{
 				
 			dataOut = MSLibrary.prepareDATAPacket(8, messageSegments[i], i%2);
+			sendPacket(dataOut, 1);
 			dataIn = listen(1);
 
 			if (!MSLibrary.getPacketType(dataIn).equals("ACK")
@@ -114,15 +114,14 @@ public class MSServerRuntime {
 	public void normalRun() {
 		if (MSLibrary.getPacketType(dataIn = listen(1)).equals("SYN"))
 		{
-			System.out.println("SYN PACKET RECEIVED");
 			String message = messageOfTheDay[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)];
 
 			// Send SYNACK
 			dataOut = MSLibrary.preparePacket(1, 8, 0, message);
 			sendPacket(dataOut, 1);
 
-			if (MSLibrary.getPacketType(dataIn = listen(1)).equals("REQUEST"))
-				sendMessage(message);
+			// if (MSLibrary.getPacketType(dataIn = listen(1)).equals("REQUEST"))
+			// 	sendMessage(message);
 		}
 	}
 
