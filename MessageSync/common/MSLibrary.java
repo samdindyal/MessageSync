@@ -12,18 +12,6 @@ public class MSLibrary {
 		return (0b00000001 & ((int)data[0]));
 	}
 
-	public static int getAmountOfPackets(byte[] data) 
-	{
-		if (data == null)
-			return -1;
-		if (!getPacketType(data).equals("DATA"))
-		{
-			String dataString = new String(data);
-			return  Integer.parseInt(dataString.substring(dataString.length()-8, dataString.length()), 2);
-		}	
-		return -1;
-	}
-
 	public static String getDataType(byte[] data)
 	{
 		if (data == null)
