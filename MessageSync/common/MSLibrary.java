@@ -117,15 +117,15 @@ public class MSLibrary {
 
 	public static String[] breakMessage(String message)
 	{
-		int numberOfPackets = (int)(Math.ceil(message.length()/15.0));
+		int numberOfPackets = (int)(Math.ceil(message.length()/14.0));
 		String[] messageSegments = new String[numberOfPackets];
 
 		for (int i = 0; i < numberOfPackets; i++)
 		{
 			if (i == numberOfPackets - 1)
-				messageSegments[i] = message.substring(i*15, message.length());
+				messageSegments[i] = message.substring(i*14, message.length());
 			else
-				messageSegments[i] = message.substring(i*15, (i+1)*15);
+				messageSegments[i] = message.substring(i*14, (i+1)*14);
 		}
 		return messageSegments;
 	}

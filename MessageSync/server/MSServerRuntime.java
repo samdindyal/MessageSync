@@ -43,15 +43,14 @@ public class MSServerRuntime {
 
 		} catch (Exception e){
 
-			e.printStackTrace();
-			// if (attempt <= 5)
-			// {
-			// 	System.err.println("Waiting for a packet. Attempt: " + attempt);
-			// 	attempt++;
-			// 	listen(attempt);
-			// }
-			// else
-			// 	System.err.println("Maximum attempts reached.");
+			if (attempt <= 5)
+			{
+				System.err.println("Waiting for a packet. Attempt: " + attempt);
+				attempt++;
+				listen(attempt);
+			}
+			else
+				System.err.println("Maximum attempts reached.");
 		}
 
 		return dataIn;
